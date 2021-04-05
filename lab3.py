@@ -17,9 +17,10 @@ x = x.reshape((len(x), 1))
 y = y.reshape((len(y), 1))
 
 # "стискаємо" отримані значення в область (0, 1)
-scaler = preprocessing.MinMaxScaler()
-x = scaler.fit_transform(x)
-y = scaler.fit_transform(y)
+scale_x = preprocessing.MinMaxScaler()
+x = scale_x.fit_transform(x)
+scale_y = preprocessing.MinMaxScaler()
+y = scale_y.fit_transform(y)
 
 print(x.min(), x.max(), y.min(), y.max())
 
@@ -43,16 +44,16 @@ model.fit(x, y, epochs=500, batch_size=10, verbose=0)
 approximation = model.predict(x)
 
 # повертаємо діапазони значень з (0, 1) до початкових
-x_plot = scaler.inverse_transform(x)
-y_plot = scaler.inverse_transform(y)
-approximation_plot = scaler.inverse_transform(approximation)
+x_plot = scale_x.inverse_transform(x)
+y_plot = scale_y.inverse_transform(y)
+approximation_plot = scale_y.inverse_transform(approximation)
 
 # виводимо сумарну похибку
 print('Mean squared error: %.4f' % metrics.mean_squared_error(y_plot, approximation_plot))
 
 # виводимо результати у вигляді графіків
-pyplot.scatter(x_plot, y_plot, label='Actual function')
-pyplot.scatter(x_plot, approximation_plot, label='Approximation')
+pyplot.scatter(x_plot, y_plot, label='Actual function', s = 10)
+pyplot.scatter(x_plot, approximation_plot, label='Approximation', s = 10)
 
 pyplot.title('Input (x) versus Output (y)')
 pyplot.xlabel('Input Variable (x)')
